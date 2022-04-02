@@ -2,11 +2,12 @@ package com.production.produce.model;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
@@ -31,6 +32,8 @@ public class Produce {
     private Long quantity;
     @NotBlank(message = "Produce Product is mandatory")
     private String product;
+    @Column(columnDefinition="boolean default false")
+    private boolean packaged;
 
     public Long getId() {
         return this.id;
@@ -62,6 +65,14 @@ public class Produce {
 
     public void setProduct(String product) {
         this.product = product;
+    }
+
+    public boolean getPackaged() {
+        return this.packaged;
+    }
+
+    public void setPackaged(boolean packaged) {
+        this.packaged = packaged;
     }
 
 }
