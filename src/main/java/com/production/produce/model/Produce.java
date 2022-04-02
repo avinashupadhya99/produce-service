@@ -7,12 +7,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name="production_produce")
 public class Produce {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "sequence-generator")
+    @GenericGenerator(
+      name = "sequence-generator",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+      parameters = {
+        @Parameter(name = "sequence_name", value = "produce_sequence"),
+        @Parameter(name = "initial_value", value = "483597632"),
+        @Parameter(name = "increment_size", value = "4")
+        }
+    )
     private Long id;
     @NotNull(message = "OrderID is mandatory")
     private Long orderId;
