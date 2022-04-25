@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import io.opentracing.Span;
+import io.opentracing.util.GlobalTracer;
 
 @RestController
 @RequestMapping("/api/v1/produce")
@@ -25,6 +27,10 @@ public class ProduceController {
     @RequestMapping(value = "/new", 
             method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Produce> createOrder(@RequestBody Produce produce) {
+        final Span span = GlobalTracer.get().activeSpan();
+        if (span != null) {
+            span.setTag("order_id", produce.getOrderId());
+        }
         Produce newProduce = produceRepository.save(produce);
         logger.info("New produce created with ProduceID - {} and OrderID - {}", newProduce.getId(), newProduce.getOrderId());
         return new ResponseEntity<>(newProduce, HttpStatus.OK);
